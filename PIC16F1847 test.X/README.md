@@ -5,4 +5,4 @@
 * XC8 : http://www.microchip.com/mplab/compilers
 
 ## Tuto
-tuto : http://microchip.wikidot.com/tls0101:lab1
+* tuto : http://microchip.wikidot.com/tls0101:lab1
