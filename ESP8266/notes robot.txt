@@ -1,0 +1,4 @@
+capteur 3 fils 
+
+Noir à gauche, bleu à droite
+S M A
