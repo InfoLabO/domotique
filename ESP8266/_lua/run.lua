@@ -12,28 +12,52 @@
 --gpio 15 => 8
 --gpio 16 => 0  SLEEP
 
-gpio.mode(11, gpio.OUTPUT)
-gpio.mode(12, gpio.OUTPUT)
 
-gpio.write(11, gpio.HIGH)
-gpio.write(12, gpio.HIGH)
-
-write_ioexp = function(adr, value) 
-   --gpio.write(tab[pin], value)
+writegpio = function(pin, value)
+   tab = {[0]=3, [1] = 10, [2] = 4, [3] = 9, [4] = 2, [5]=1, [12]=6, [13] = 7,
+          [14]=5,[15]=8,[16]=0}
+   
+   gpio.write(tab[pin], value)
 end
 
-read_ioexp = function(adr) 
-   --gpio.write(tab[pin], value)
-   return 562
-end
 
-gpio.write(4, gpio.HIGH)
+  gpio.mode(0, gpio.OUTPUT)
+  gpio.write(0, gpio.HIGH)
 
-while true do
+  gpio.mode(6, gpio.OUTPUT)
+  gpio.mode(7, gpio.OUTPUT)
+  gpio.mode(5, gpio.OUTPUT)
 
-    if (read_ioexp(5) == 562) then
-      gpio.write(4, gpio.LOW)
+  gpio.mode(1, gpio.INPUT, gpio.PULLUP)
+
+  gpio.write(4, gpio.HIGH)
+
+  while true do
+
+    gpio.write(4, gpio.HIGH)
+
+    while gpio.read(1) == 1 do
+        
+        gpio.write(7, gpio.HIGH)
+        gpio.write(6, gpio.HIGH)
+        gpio.write(6, gpio.LOW)
+        
+        gpio.write(7, gpio.LOW)
+        gpio.write(5, gpio.HIGH)
+        gpio.write(5, gpio.LOW)
+        tmr.delay(20000)
+        tmr.wdclr()
     end
-    tmr.wdclr()        
+
+    gpio.write(4, gpio.LOW)
+    for i=0,48,1 do        
+        gpio.write(7, gpio.HIGH)
+        gpio.write(6, gpio.HIGH)
+        gpio.write(6, gpio.LOW)
+        gpio.write(5, gpio.HIGH)
+        gpio.write(5, gpio.LOW)
+        tmr.delay(20000)
+        tmr.wdclr()        
+    end
   
-end
+  end
