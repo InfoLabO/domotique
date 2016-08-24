@@ -12,27 +12,28 @@
 --gpio 15 => 8
 --gpio 16 => 0  SLEEP
 
---initialisation du SPI
 gpio.mode(11, gpio.OUTPUT)
 gpio.mode(12, gpio.OUTPUT)
+
 gpio.write(11, gpio.HIGH)
 gpio.write(12, gpio.HIGH)
 
---SPI = 0
---HSPI = 1
-spi.setup(1, spi.MASTER, spi.CPOL_LOW, spi.CPHA_LOW, 8, 0)
-
-write_ioexp = function(adr, value)
+write_ioexp = function(adr, value) 
+   --gpio.write(tab[pin], value)
 end
 
 read_ioexp = function(adr) 
+   --gpio.write(tab[pin], value)
    return 562
 end
 
-writegpio = function(pin, value)
-   tab = {[0]=3, [1] = 10, [2] = 4, [3] = 9, [4] = 2, [5]=1, [12]=6, [13] = 7,
-          [14]=5,[15]=8,[16]=0}
-   
-   gpio.write(tab[pin], value)
-end
+gpio.write(4, gpio.HIGH)
 
+while true do
+
+    if (read_ioexp(5) == 562) then
+      gpio.write(4, gpio.LOW)
+    end
+    tmr.wdclr()        
+  
+end
