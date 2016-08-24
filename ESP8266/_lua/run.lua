@@ -36,3 +36,11 @@ writegpio = function(pin, value)
    gpio.write(tab[pin], value)
 end
 
+gpio.write(4, gpio.HIGH)
+
+while true do
+ 
+    if (read_ioexp(5) == 562) then
+      gpio.write(4, gpio.LOW)
+    end
+    tmr.wdclr() 
