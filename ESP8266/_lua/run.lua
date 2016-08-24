@@ -12,18 +12,20 @@
 --gpio 15 => 8
 --gpio 16 => 0  SLEEP
 
+--initialisation du SPI
 gpio.mode(11, gpio.OUTPUT)
 gpio.mode(12, gpio.OUTPUT)
-
 gpio.write(11, gpio.HIGH)
 gpio.write(12, gpio.HIGH)
 
-write_ioexp = function(adr, value) 
-   --gpio.write(tab[pin], value)
+--SPI = 0
+--HSPI = 1
+spi.setup(1, spi.MASTER, spi.CPOL_LOW, spi.CPHA_LOW, 8, 0)
+
+write_ioexp = function(adr, value)
 end
 
 read_ioexp = function(adr) 
-   --gpio.write(tab[pin], value)
    return 562
 end
 
