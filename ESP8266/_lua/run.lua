@@ -20,27 +20,38 @@ gpio.write(12, gpio.HIGH)
 
 --SPI = 0
 --HSPI = 1
-spi.setup(1, spi.MASTER, spi.CPOL_LOW, spi.CPHA_LOW, 8, 0)
+--gpio.mode(5, gpio.OUTPUT)
+spi.setup(2, spi.SLAVE, spi.CPOL_LOW, spi.CPHA_LOW, spi.DATABITS_8, 32, spi.HALFDUPLEX)
 
 write_ioexp = function(adr, value)
+    gpio.write(11, gpio.LOW)
+    spi.send(1,0x40)
+    spi.send(1,adr)
+    spi.send(1,value)
+    gpio.write(11, gpio.HIGH)
 end
 
-read_ioexp = function(adr) 
-   return 562
-end
-
-writegpio = function(pin, value)
-   tab = {[0]=3, [1] = 10, [2] = 4, [3] = 9, [4] = 2, [5]=1, [12]=6, [13] = 7,
-          [14]=5,[15]=8,[16]=0}
-   
-   gpio.write(tab[pin], value)
+read_ioexp = function(adr)
+   gpio.write(11, gpio.LOW)
+   spi.send(1,0x41)
+   spi.send(1,adr)
+   local res=spi.recv(1,0x00)
+   gpio.write(11, gpio.HIGH)
+   return res
 end
 
 gpio.write(4, gpio.HIGH)
 
 while true do
- 
-    if (read_ioexp(5) == 562) then
-      gpio.write(4, gpio.LOW)
-    end
-    tmr.wdclr() 
+    --local v = 0x55
+    --if (read_ioexp(5) == 562) then
+    --  gpio.write(4, gpio.LOW)
+    --end
+    --spi.send(1,0x10)
+    --spi.set_mosi(1, 0, 16, v)
+    --spi.send(1,0x55)
+    --if(read_ioexp(0x00)==0xFF)then gpio.write(4, gpio.LOW) end
+    
+    tmr.wdclr()
+    tmr.delay(1000000)
+end
