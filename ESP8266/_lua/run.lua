@@ -42,9 +42,32 @@ read_ioexp = function(adr)
    return res
 end
 
+expCapvOut = 0x00
+init_ioCapt = function()
+    --sens io FC
+    write_ioexp(0x00,0xFC)
+    --pullup FC
+    write_ioexp(0x06,0xFC)
+    --expCapvOut = 0x00
+end
+
+select_ioCapt = function(code)
+    expCapvOut = (expCapvOut and 0xFC) or code
+    --IO output cap
+    write_ioexp(0x0A,expCapvOut)
+end
+
+read_ioCapt = function()
+    --IO input cap
+    return (read_ioexp(0x09) and 0x1C)
+end
+
+
 gpio.write(4, gpio.HIGH)
 
-write_ioexp(0x00,0x87)
+init_ioCapt()
+write_ioexp(0x0A,0x03)
+--select_ioCapt(3) --active tout les capteurs
 
 while true do
     --local v = 0x55
@@ -54,16 +77,18 @@ while true do
     --spi.send(1,0x10)
     --spi.set_mosi(1, 0, 16, v)
     --spi.send(1,0x55)
-    local res = 0
-    res = read_ioexp(0x00)
-    if(res==0x87)then gpio.write(4, gpio.LOW) end
+    --local res = 0
+    res = read_ioexp(0x09)
+    if(res==0xFF)then gpio.write(4, gpio.LOW) else  gpio.write(4, gpio.HIGH)  end
     print("receive from uart:", res)
     --uart.write(0,"HELLO")
 
+    --local res = read_ioCapt()
+    --if(res ~= 0x1C)then gpio.write(4, gpio.LOW) else gpio.write(4, gpio.HIGH) end
+
     --gpio.write(11, gpio.LOW)
-    
     --gpio.write(11, gpio.HIGH)
     
     tmr.wdclr()
-    tmr.delay(1000000)
+    tmr.delay(500000) --500ms
 end
