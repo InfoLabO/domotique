@@ -13,34 +13,38 @@
 --gpio 16 => 0  SLEEP
 
 --initialisation du SPI
-gpio.mode(11, gpio.OUTPUT)
+--gpio.mode(11, gpio.OUTPUT)
 gpio.mode(12, gpio.OUTPUT)
-gpio.write(11, gpio.HIGH)
+--gpio.write(11, gpio.HIGH)
 gpio.write(12, gpio.HIGH)
 
 --SPI = 0
 --HSPI = 1
 --gpio.mode(5, gpio.OUTPUT)
-spi.setup(2, spi.SLAVE, spi.CPOL_LOW, spi.CPHA_LOW, spi.DATABITS_8, 32, spi.HALFDUPLEX)
+spi.setup(1, spi.MASTER, spi.CPOL_LOW, spi.CPHA_LOW, spi.DATABITS_8, 32, spi.HALFDUPLEX)
+
+uart.setup(0, 9600, 8, 0, 0, 0)
 
 write_ioexp = function(adr, value)
-    gpio.write(11, gpio.LOW)
+    gpio.write(12, gpio.LOW)
     spi.send(1,0x40)
     spi.send(1,adr)
     spi.send(1,value)
-    gpio.write(11, gpio.HIGH)
+    gpio.write(12, gpio.HIGH)
 end
 
 read_ioexp = function(adr)
-   gpio.write(11, gpio.LOW)
+   gpio.write(12, gpio.LOW)
    spi.send(1,0x41)
    spi.send(1,adr)
-   local res=spi.recv(1,0x00)
-   gpio.write(11, gpio.HIGH)
+   local res = string.byte(spi.recv(1,1),1)
+   gpio.write(12, gpio.HIGH)
    return res
 end
 
 gpio.write(4, gpio.HIGH)
+
+write_ioexp(0x00,0x87)
 
 while true do
     --local v = 0x55
@@ -50,7 +54,15 @@ while true do
     --spi.send(1,0x10)
     --spi.set_mosi(1, 0, 16, v)
     --spi.send(1,0x55)
-    --if(read_ioexp(0x00)==0xFF)then gpio.write(4, gpio.LOW) end
+    local res = 0
+    res = read_ioexp(0x00)
+    if(res==0x87)then gpio.write(4, gpio.LOW) end
+    print("receive from uart:", res)
+    --uart.write(0,"HELLO")
+
+    --gpio.write(11, gpio.LOW)
+    
+    --gpio.write(11, gpio.HIGH)
     
     tmr.wdclr()
     tmr.delay(1000000)
