@@ -10,6 +10,7 @@
 --gpio 15 => 8
 --gpio 16 => 0  SLEEP
 
+MSLP = 0 --gpio 16
 MDIR = 4 --gpio 2
 MSTR = 2 --gpio 4
 MSTL = 1 --gpio 5
@@ -25,15 +26,13 @@ MSTL = 1 --gpio 5
 
 --tourner = function()
 
-  gpio.mode(0, gpio.OUTPUT)
-  gpio.write(0, gpio.HIGH)
-
+  
+  gpio.mode(MSLP, gpio.OUTPUT)
   gpio.mode(MDIR, gpio.OUTPUT)
   gpio.mode(MSTR, gpio.OUTPUT)
   gpio.mode(MSTL, gpio.OUTPUT)
 
-  gpio.write(6, gpio.LOW)
-  gpio.write(6, gpio.HIGH)
+  gpio.write(MSLP, gpio.HIGH)
 
   while true do
 	gpio.write(MDIR, gpio.HIGH)
