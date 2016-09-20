@@ -57,6 +57,7 @@ end
 init_ioCapt()
 write_ioexp(0x0A,0x03)
 gpio.write(MSLP, gpio.HIGH)
+obs=0
 
 while true do
 
@@ -68,19 +69,21 @@ while true do
         gpio.write(MDIR, gpio.LOW)
         gpio.write(MSTL, gpio.HIGH)
         gpio.write(MSTL, gpio.LOW)
-        tmr.delay(20000)
+        tmr.delay(40000)
         tmr.wdclr()
     end
 
+    obs = read_ioCapt()
     gpio.write(MDIR, gpio.HIGH)
-    for i=0,24,1 do
+    for i=0,48,1 do
         gpio.write(MSTR, gpio.HIGH)
         gpio.write(MSTR, gpio.LOW)
         
         gpio.write(MSTL, gpio.HIGH)
         gpio.write(MSTL, gpio.LOW)
-        tmr.delay(20000)
+        tmr.delay(80000)
         tmr.wdclr()
+        if obs~=read_ioCapt() then break end
     end
     expCapvOut = read_ioCapt()
 
@@ -92,19 +95,21 @@ while true do
         gpio.write(MDIR, gpio.LOW)
         gpio.write(MSTL, gpio.HIGH)
         gpio.write(MSTL, gpio.LOW)
-        tmr.delay(20000)
+        tmr.delay(40000)
         tmr.wdclr()
     end
 
+    local obs = read_ioCapt()
     gpio.write(MDIR, gpio.LOW)
-    for i=0,24,1 do
+    for i=0,48,1 do
         gpio.write(MSTR, gpio.HIGH)
         gpio.write(MSTR, gpio.LOW)
         
         gpio.write(MSTL, gpio.HIGH)
         gpio.write(MSTL, gpio.LOW)
-        tmr.delay(20000)
+        tmr.delay(80000)
         tmr.wdclr()
+        if obs~=read_ioCapt() then break end
     end
     expCapvOut = read_ioCapt()
     
