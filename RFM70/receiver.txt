@@ -1,0 +1,28 @@
+unsigned char rc_pipe;
+unsigned char rc_buffer[RFM70_MAX_PACKET_LEN];
+unsigned char rc_length;
+
+void setup()
+{
+   rfm70_init();
+}
+
+void recv()
+{
+         if(rfm70_receive(&rc_pipe,rc_buffer,&rc_length))
+         {
+            if(rc_buffer[0]==CODE_SYNCHRO)
+               flagSync=0xFF;
+            else if(rc_buffer[0]==CODE_PROG_START)
+               start_programme();
+            else if(rc_buffer[0]==CODE_UPDATE)
+            {
+               numprog=rc_buffer[1]-'0';
+               check_sync_str(rc_buffer+2);
+               framemove_vannes();
+               flagSync=0xFF;
+            }
+         }
+         rfm70_mode_receive();
+         set_IRQ_to_RX();
+}
