@@ -1,0 +1,15 @@
+unsigned char rc_pipe;
+unsigned char rc_buffer[RFM70_MAX_PACKET_LEN];
+unsigned char rc_length;
+
+void setup()
+{
+   rfm70_init();
+}
+
+void sendSyncReq(unsigned char code)
+{ 
+   rfm70_mode_transmit();
+   rfm70_transmit_message_once(rc_buffer,RFM70_MAX_PACKET_LEN);
+   set_IRQ_to_TX();
+}
