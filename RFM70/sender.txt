@@ -5,6 +5,8 @@ unsigned char rc_length;
 void setup()
 {
    rfm70_init();
+   rfm70_mode_send();
+   set_IRQ_to_TX();
 }
 
 void sendSyncReq(unsigned char code)
